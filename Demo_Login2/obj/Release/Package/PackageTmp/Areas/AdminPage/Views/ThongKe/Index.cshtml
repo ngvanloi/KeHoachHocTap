@@ -1,0 +1,186 @@
+﻿@model List<Demo_Login2.Models.DTO.KhoaDaoTaoDTO>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<style>
+    .dropSize {
+        margin: 0 auto;
+        min-width: 478px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Trang Thống Kê</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Trang Thống Kê</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card-header">
+                @using (Html.BeginForm("Index", "ThongKe", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-sm-2 dropSize">
+                            @Html.DropDownList("idHocki", ViewData["HK"] as SelectList, new { @class = "form-control", onchange = @"form.submit();" })
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">@ViewData["piechart_title" + @item.ID]</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="chart">
+                                                    <script>
+                                                          $(document).ready(() => {
+                                                              new Chart(document.getElementById("pie" +@item.ID).getContext('2d'), {
+                                                                  type: 'pie',
+                                                                  data: {
+                                                                      labels: [
+                                                                          'Đã Đăng Kí',
+                                                                          'Chưa Đăng Kí'
+                                                                      ],
+                                                                      datasets: [
+                                                                        {
+                                                                            data: [@ViewData["piechart_data" + @item.ID]],
+                                                                              backgroundColor: ['#00a65a', '#f56954']
+                                                                        }
+                                                                    ]
+                                                                  },
+                                                                  options: {
+                                                                      legend: {
+                                                                          display: false
+                                                                          
+                                                                      }
+                                                                  }
+
+                                                              })
+                                                          })
+                                                    </script>
+                                                    <canvas id="@("pie"+@item.ID)" height="150"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <ul class="chart-legend clearfix">
+                                                    <li><i class="far fa-circle text-danger"></i> Chưa Đăng Kí</li>
+                                                    <li><i class="far fa-circle text-success"></i> Đã Đăng Kí</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="row">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">@ViewData["barchart_title" + @item.ID]</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <script>
+                                            $(document).ready(() => {
+                                                new Chart(document.getElementById("bar"+@item.ID).getContext('2d'), {
+                                                    type: 'bar',
+                                                    data: {
+                                                        labels: [@Html.Raw(ViewData["barchart_label" + @item.ID])],
+                                                        datasets: [{
+                                                            label: 'Đã Đăng Kí',
+                                                            backgroundColor: "#00a65a", 
+                                                            data: [@ViewData["barchart_data_monhocsvdadangki" + @item.ID]],
+                                                        }, {
+                                                            label: 'Chưa Đăng Kí',
+                                                            backgroundColor: "#f56954",
+                                                            data: [@ViewData["barchart_data_monhocsvchuadangki" + @item.ID]],
+                                                        }],
+                                                    },
+                                                    options: {
+                                                        tooltips: {
+                                                            displayColors: true,
+                                                            callbacks: {
+                                                                mode: 'x',
+                                                            },
+                                                        },
+                                                        scales: {
+                                                            xAxes: [{
+                                                                stacked: true,
+                                                                gridLines: {
+                                                                    display: false,
+                                                                }
+                                                            }],
+                                                            yAxes: [{
+                                                                stacked: true,
+                                                                ticks: {
+                                                                    beginAtZero: true,
+                                                                },
+                                                                type: 'linear',
+                                                            }]
+                                                        },
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        legend: { position: 'bottom' },
+                                                    }
+                                                });
+                                            })
+                                        </script>
+                                        <canvas id="@("bar"+@item.ID)" height="350"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- /.content -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.esm.js" integrity="sha512-sDIo/n5fJbs7V+4hOX86nUfT5TGsR2aROCrFwOGmk8AscP/n1z2roW5JV4Lz+aILf3wBZYW/7W2g2NRD00gpOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.esm.min.js" integrity="sha512-jZzg6pScDaxwQMIYigQwhPoykbqFDJ2HgeXkeMAQtKKEUbjAYZvtlSyTZdovoqKFbDG58S60zUdLlQDW6pwF7g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.js" integrity="sha512-CWVDkca3f3uAWgDNVzW+W4XJbiC3CH84P2aWZXj+DqI6PNbTzXbl1dIzEHeNJpYSn4B6U8miSZb/hCws7FnUZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/helpers.esm.js" integrity="sha512-q8VAbZG23p44LnzuQVJ0abDxOnlA1562eKVeywBgNsXVSCYRuT7eCdGtfn4MrEcEtGrTBwbsOQeQFjqdtL4fmw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/helpers.esm.min.js" integrity="sha512-1b6IKdJzKvjUfXuATUJs0a4ti8sBZHY0DKZ1O1UCj3cpw+IEKxUwG2UtXNOjS5/JkqxQ2v5GUMFn62mtZyXAfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script src="path/to/chartjs/dist/chart.js"></script>
+
+

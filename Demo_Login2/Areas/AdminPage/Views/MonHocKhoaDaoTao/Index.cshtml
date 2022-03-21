@@ -1,0 +1,174 @@
+﻿@model List<Demo_Login2.Models.DTO.MonHocKhoaDaoTaoDTO>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Khóa - Môn Học</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Khóa - Môn Học</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <button class="btn btn-outline-primary" title="Thêm" style="cursor:pointer" onclick="location.href='@Url.Action("Create","MonHocKhoaDaoTao")'">
+                    <i class="fas fa-plus">
+                        Thêm
+                    </i>
+                </button>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Môn Học</th>
+                            <th>Khóa Đào Tạo</th>
+                            @*<th>Học Kì</th>*@
+                            @*<th>Loại Môn Học</th>*@
+                            <th>Học Phần Tiên Quyết</th>
+                            <th>Học Phần Học Trước</th>
+                            @*<th>Ghi Chú</th>*@
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                @foreach (var row in ViewBag.monhoc)
+                                {
+                                    if (row.ID == item.IDMonHoc)
+                                    {
+                                        <td>@row.TenMonHoc</td>
+                                    }
+                                }
+                                @foreach (var row in ViewBag.khoadaotao)
+                                {
+                                    if (row.ID == item.IDKhoaDaoTao)
+                                    {
+                                        <td>@row.TenKhoaDaoTao</td>
+                                    }
+                                }
+                                @*@foreach (var row in ViewBag.hocki)
+                                {
+                                    if (row.ID == item.IDHocKi)
+                                    {
+                                        <td>@row.TenHocKi</td>
+                                    }
+                                }*@
+                                @*@foreach (var row in ViewBag.phanloaimonhoc)
+                                {
+                                    if (row.ID == item.IDPhanLoaiMonHoc)
+                                    {
+                                        <td>@row.LoaiMonHoc</td>
+                                    }
+                                }*@
+
+
+
+                                @if (item.IDHocPhanTienQuyet > 0)
+                                {
+                                    foreach (var row in ViewBag.monhoc)
+                                    {
+                                        if (row.ID == item.IDHocPhanTienQuyet)
+                                        {
+                                            <td>@row.TenMonHoc</td>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+
+
+
+                                @if (item.IDHocPhanHocTruoc > 0)
+                                {
+                                    foreach (var row in ViewBag.monhoc)
+                                    {
+                                        if (row.ID == item.IDHocPhanHocTruoc)
+                                        {
+                                            <td>@row.TenMonHoc</td>
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                @*<td>@item.GhiChu</td>*@
+                                <td>
+                                    <button class="btn btn-outline-warning" title="Sửa" style="cursor:pointer" onclick="location.href='@Url.Action("Edit","MonHocKhoaDaoTao",new {id = item.ID})'">
+                                        <i class="fas fa-pen"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-outline-danger btndeleteMonHocKhoaDaoTao" title="Xóa" style="cursor:pointer" data-id="@item.ID">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                    <button class="btn btn-outline-info" title="Xem chi tiết" style="cursor:pointer" onclick="location.href='@Url.Action("Details","MonHocKhoaDaoTao",new {id = item.ID})'">
+                                        <i class="fas fa-file-invoice"></i>
+                                        Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnShowModal_Add").click(function () {
+            $("#AddModal").modal('show');
+        });
+
+        $("#btnHideModal_Add").click(function () {
+            $("#AddModal").modal('hide');
+        });
+
+        $(".btndeleteMonHocKhoaDaoTao").click(function () {
+            var dataId = $(this).attr("data-id");
+            swal({
+                title: "Xác nhận?",
+                text: "Bạn có chắc muốn xóa!!!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location = "@Url.Action("Delete", "MonHocKhoaDaoTao")/" + dataId;
+
+                        swal("Xóa thành công", {
+                            icon: "success",
+                        });
+                    }
+                });
+        });
+
+    });
+</script>
+

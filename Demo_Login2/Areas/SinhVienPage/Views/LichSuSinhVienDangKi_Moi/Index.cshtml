@@ -1,0 +1,224 @@
+﻿@model List<Demo_Login2.Models.DTO.SinhVienDangKiKeHoachHocTapDTO>
+@using Demo_Login2.Models.DTO;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .tbl-head {
+        text-align: center;
+        background: #FECE7A;
+        border: #fff solid 1px;
+        text-transform: uppercase;
+    }
+
+    .custom-label {
+        border: none;
+    }
+
+        .custom-label:focus {
+            outline: none;
+        }
+
+    .col-120 {
+        width: 120px;
+        text-align: center;
+    }
+
+    .col-400 {
+        width: 400px;
+    }
+
+    .col-60 {
+        width: 65px;
+        text-align: center;
+    }
+
+    .col-68 {
+        width: 68px;
+        text-align: center;
+    }
+    /*.col-350{
+        width:400px
+    }*/
+    .col-350 {
+        text-align: center;
+        width: 365px;
+    }
+
+    .center {
+        text-align: center;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Lịch Sủ Đăng Kí</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Lịch Sủ Đăng Kí</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                Lịch sử đăng kí Kế hoạch học tập
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="display: flex; flex-direction: column-reverse;">
+                <br />
+
+                <!----table 1-->
+                <table class="table table-bordered">
+                    <tr class="tbl-head">
+                        <th rowspan="2">TT</th>
+                        <th rowspan="2">Mã học phần</th>
+                        <th rowspan="2">Tên học phần</th>
+                        <th rowspan="2">Số TC</th>
+                        <th colspan="2">Số Tiết</th>
+                        <th rowspan="2">Học Phần Tiên Quyết</th>
+                        <th rowspan="2">Học Phần Học Trước</th>
+                        <th rowspan="2">Khoa/Bộ môn</th>
+                        <th rowspan="2">Trạng Thái</th>
+                    </tr>
+                    <tr class="tbl-head">
+                        <th colspan="1">LT</th>
+                        <th colspan="1">TH</th>
+                    </tr>
+                    @{
+                        var lstLichSu = (List<SinhVienDangKiKeHoachHocTapDTO>)ViewBag.LichSu;
+                        foreach (var hocki in ViewBag.HocKi)
+                        {
+                            var stt = 0;
+                            var TongTC_chuongtrinhdaotao_batbuoc = 0;
+                            var TongTC_chuongtrinhdaotao_tuchon = 0;
+
+                            var batbuoc = lstLichSu.Where(c => c.IDPhanLoaiMonHoc == 1 && c.IDHocKi == hocki.ID);
+                            var tuchon = lstLichSu.Where(c => c.IDPhanLoaiMonHoc == 2 && c.IDHocKi == hocki.ID);
+
+                            if (batbuoc.Count() > 0 || tuchon.Count() > 0)
+                            {
+                                <tr>
+                                    <th colspan="10">@hocki.TenHocKi</th>
+                                </tr>
+                            }
+
+                            if (batbuoc.Count() > 0)
+                            {
+
+                                <tr>
+                                    <th colspan="10">Bắt buộc</th>
+                                </tr>
+                                foreach (var item in batbuoc)
+                                {
+                                    stt = stt + 1;
+                                    <tr>
+                                        <td class="center">@stt</td>
+                                        <td class="col-120">@item.MaMonHoc</td>
+                                        <td class="col-400">@item.TenMonHoc</td>
+                                        <td class="col-60">@item.SoTinChi</td>
+                                        <td class="col-68">@item.SoTietLyThuyet</td>
+                                        <td class="col-68">@item.SoTietThucHanh</td>
+                                        <td class="col-350">@item.TenMonHocTienQuyet</td>
+                                        <td class="col-350">@item.TenMonHocHocTruoc</td>
+                                        <td class="col-350">@item.TenKhoaBoMon</td>
+                                        @if (item.TrangThai == true)
+                                        {
+                                            <td class="center col-120"><i class="fas fa-check text-success font-weight-bold" title="Đã Đăng Kí" style="cursor:pointer"></i></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="center col-120"><i class="fas fa-times text-danger font-weight-bold" title="Chưa Đăng Kí" style="cursor:pointer"></i></td>
+                                        }
+
+                                    </tr>
+                                    TongTC_chuongtrinhdaotao_batbuoc = TongTC_chuongtrinhdaotao_batbuoc + @item.SoTinChi;
+                                }
+
+
+
+                                if (TongTC_chuongtrinhdaotao_batbuoc > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Cộng học phần Bắt buộc</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_batbuoc</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+
+                            if (tuchon.Count() > 0)
+                            {
+
+                                <tr>
+                                    <th colspan="10">Tự Chọn</th>
+                                </tr>
+                                foreach (var item in tuchon)
+                                {
+                                    stt = stt + 1;
+                                    <tr>
+                                        <td class="center">@stt</td>
+                                        <td class="col-120">@item.MaMonHoc</td>
+                                        <td class="col-400">@item.TenMonHoc</td>
+                                        <td class="col-60">@item.SoTinChi</td>
+                                        <td class="col-68">@item.SoTietLyThuyet</td>
+                                        <td class="col-68">@item.SoTietThucHanh</td>
+                                        <td class="col-350">@item.TenMonHocTienQuyet</td>
+                                        <td class="col-350">@item.TenMonHocHocTruoc</td>
+                                        <td class="col-350">@item.TenKhoaBoMon</td>
+                                        @if (item.TrangThai == true)
+                                        {
+                                            <td class="center col-120"><i class="fas fa-check text-success font-weight-bold" title="Đã Đăng Kí" style="cursor:pointer"></i></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="center col-120"><i class="fas fa-times text-danger font-weight-bold" title="Chưa Đăng Kí" style="cursor:pointer"></i></td>
+                                        }
+
+                                    </tr>
+                                    TongTC_chuongtrinhdaotao_tuchon = TongTC_chuongtrinhdaotao_tuchon + @item.SoTinChi;
+                                }
+
+
+
+                                if (TongTC_chuongtrinhdaotao_tuchon > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Cộng học phần Tự chọn</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_tuchon</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+
+
+
+                        }
+
+                    }
+                </table>
+                <!----end table 1-->
+
+
+            </div>
+        </div>
+    </section>
+</div>
+

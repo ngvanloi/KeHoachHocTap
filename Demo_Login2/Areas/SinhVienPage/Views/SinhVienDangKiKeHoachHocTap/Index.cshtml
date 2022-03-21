@@ -1,0 +1,461 @@
+﻿@model List<Demo_Login2.Models.DTO.SinhVienDangKiKeHoachHocTapDTO>
+@using Demo_Login2.Models.DTO;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .tbl-head {
+        text-align: center;
+        background: #FECE7A;
+        border: #fff solid 1px;
+        text-transform: uppercase;
+    }
+
+    .custom-label {
+        border: none;
+    }
+
+        .custom-label:focus {
+            outline: none;
+        }
+
+    .col-120 {
+        width: 120px;
+        text-align: center;
+    }
+
+    .col-400 {
+        width: 400px;
+    }
+
+    .col-60 {
+        width: 65px;
+        text-align: center;
+    }
+
+    .col-68 {
+        width: 68px;
+        text-align: center;
+    }
+    /*.col-350{
+        width:400px
+    }*/
+    .col-350 {
+        text-align: center;
+        width: 365px;
+    }
+
+    .center {
+        text-align: center;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Đăng kí Kế Hoạch Học Tập</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Đăng kí Kế Hoạch Học Tập</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                Đăng Kí Kế hoạch học tập
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="display: flex; flex-direction: column-reverse;">
+                <br />
+                <!----table 1-->
+                <table class="table table-bordered">
+                    <tr class="tbl-head">
+                        <th rowspan="2">TT</th>
+                        <th rowspan="2">Mã học phần</th>
+                        <th rowspan="2">Tên học phần</th>
+                        <th rowspan="2">Số TC</th>
+                        <th colspan="2">Số Tiết</th>
+                        <th rowspan="2">Học Phần Tiên Quyết</th>
+                        <th rowspan="2">Học Phần Học Trước</th>
+                        <th rowspan="2">Khoa/Bộ môn</th>
+                        <th rowspan="2">Đăng kí</th>
+                    </tr>
+                    <tr class="tbl-head">
+                        <th colspan="1">LT</th>
+                        <th colspan="1">TH</th>
+                    </tr>
+                    @if (Model.Count() > 0)
+                    {
+
+
+                        using (Html.BeginForm("Index", "SinhVienDangKiKeHoachHocTap"))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            var stt = 0;
+
+                            var TongTC_chuongtrinhdaotao_batbuoc = 0;
+                            var TongTC_chuongtrinhdaotao_tuchon = 0;
+
+
+                            var batbuoc = Model.Where(c => c.IDPhanLoaiMonHoc == 1);
+                            var tuchon = Model.Where(c => c.IDPhanLoaiMonHoc == 2);
+                            <tr>
+                                <th colspan="10"> @ViewBag.tenHocKi </th>
+                            </tr>
+
+                            if (batbuoc.Count() > 0)
+                            {
+                                <tr>
+                                    <th colspan="10">Bắt buộc</th>
+                                </tr>
+
+                                for (var i = 0; i < Model.Count; i++)
+                                {
+                                    if (Model[i].IDPhanLoaiMonHoc == 1)
+                                    {
+
+                                        stt = stt + 1;
+                                        <tr>
+                                            <td class="center">@stt</td>
+                                            <td class="col-120">@Html.EditorFor(model => model[i].MaMonHoc, new { htmlAttributes = new { @class = "custom-label w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-400">@Html.EditorFor(model => model[i].TenMonHoc, new { htmlAttributes = new { @class = "custom-label col-400 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-60">@Html.EditorFor(model => model[i].SoTinChi, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-68">@Html.EditorFor(model => model[i].SoTietLyThuyet, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-68">@Html.EditorFor(model => model[i].SoTietThucHanh, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenMonHocTienQuyet, new { htmlAttributes = new { @class = "custom-label col-350 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenMonHocHocTruoc, new { htmlAttributes = new { @class = "custom-label col-350 w-100", @readonly = "readonly" } })</td>
+
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenKhoaBoMon, new { htmlAttributes = new { @class = "custom-label col-350 w-100", @readonly = "readonly" } })</td>
+
+                                            <td>
+                                                @Html.EditorFor(model => model[i].TrangThai, new { htmlAttributes = new { @class = "form-control w-100 item-checkbox" } })
+                                                @Html.HiddenFor(model => model[i].IDHocKi)
+                                                @Html.HiddenFor(model => model[i].IDMonHoc)
+                                                @Html.HiddenFor(model => model[i].IDKhoaDaoTao)
+                                                @Html.HiddenFor(model => model[i].IDPhanLoaiMonHoc)
+                                                @Html.HiddenFor(model => model[i].ID)
+                                            </td>
+                                        </tr>
+                                        TongTC_chuongtrinhdaotao_batbuoc = TongTC_chuongtrinhdaotao_batbuoc + Model[i].SoTinChi;
+                                    }
+                                }
+
+                                if (TongTC_chuongtrinhdaotao_batbuoc > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Tổng học phần Bắt buộc</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_batbuoc</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    @*<tr>
+                                        <td colspan="9" class="text-right font-weight-bold">Chọn tất cả</td>
+                                        <td>
+                                            <input type="checkbox" class="form-control w-100 selectAll" />
+                                        </td>
+                                    </tr>*@
+                                }
+                            }
+
+                            if (tuchon.Count() > 0)
+                            {
+                                <tr>
+                                    <th colspan="10">Tự chọn</th>
+                                </tr>
+
+                                for (var i = 0; i < Model.Count; i++)
+                                {
+                                    if (Model[i].IDPhanLoaiMonHoc == 2)
+                                    {
+
+                                        stt = stt + 1;
+                                        <tr>
+                                            <td class="center">@stt</td>
+                                            <td class="col-120">@Html.EditorFor(model => model[i].MaMonHoc, new { htmlAttributes = new { @class = "custom-label w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-400">@Html.EditorFor(model => model[i].TenMonHoc, new { htmlAttributes = new { @class = "custom-label col-400 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-60">@Html.EditorFor(model => model[i].SoTinChi, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-68">@Html.EditorFor(model => model[i].SoTietLyThuyet, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-68">@Html.EditorFor(model => model[i].SoTietThucHanh, new { htmlAttributes = new { @class = "custom-label col-55 w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenMonHocTienQuyet, new { htmlAttributes = new { @class = "custom-label w-100", @readonly = "readonly" } })</td>
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenMonHocHocTruoc, new { htmlAttributes = new { @class = "custom-label w-100", @readonly = "readonly" } })</td>
+
+                                            <td class="col-350">@Html.EditorFor(model => model[i].TenKhoaBoMon, new { htmlAttributes = new { @class = "custom-label col-350 w-100", @readonly = "readonly" } })</td>
+
+                                            <td>
+                                                @Html.EditorFor(model => model[i].TrangThai, new { htmlAttributes = new { @class = "form-control w-100 item-checkbox" } })
+                                                @Html.HiddenFor(model => model[i].IDHocKi)
+                                                @Html.HiddenFor(model => model[i].IDMonHoc)
+                                                @Html.HiddenFor(model => model[i].IDKhoaDaoTao)
+                                                @Html.HiddenFor(model => model[i].IDPhanLoaiMonHoc)
+
+                                            </td>
+                                        </tr>
+                                        TongTC_chuongtrinhdaotao_tuchon = TongTC_chuongtrinhdaotao_tuchon + Model[i].SoTinChi;
+                                    }
+                                }
+
+                                if (TongTC_chuongtrinhdaotao_tuchon > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Tổng học phần Tự chọn</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_tuchon</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+
+                                }
+                            }
+                            if (batbuoc.Count() > 0 || tuchon.Count() > 0)
+                            {
+                                <tr>
+                                    <td colspan="9" class="text-right font-weight-bold">Chọn tất cả</td>
+                                    <td>
+                                        <input type="checkbox" class="form-control w-100 selectAll" />
+                                    </td>
+                                </tr>
+                            }
+                            <div class="col-md-offset-2 col-md-10 px-0 py-2">
+                                <button class="btn btn-outline-success">
+                                    <i class="fas fa-check"></i>
+                                    Lưu
+                                </button>
+                            </div>
+
+                        }
+
+
+                    }
+
+                </table>
+                <!----end table 1-->
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Lịch sử đăng kí Kế hoạch học tập
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="display: flex; flex-direction: column-reverse;">
+                <br />
+
+                <!----table 1-->
+                <table class="table table-bordered">
+                    <tr class="tbl-head">
+                        <th rowspan="2">TT</th>
+                        <th rowspan="2">Mã học phần</th>
+                        <th rowspan="2">Tên học phần</th>
+                        <th rowspan="2">Số TC</th>
+                        <th colspan="2">Số Tiết</th>
+                        <th rowspan="2">Học Phần Tiên Quyết</th>
+                        <th rowspan="2">Học Phần Học Trước</th>
+                        <th rowspan="2">Khoa/Bộ môn</th>
+                    </tr>
+                    <tr class="tbl-head">
+                        <th colspan="1">LT</th>
+                        <th colspan="1">TH</th>
+                    </tr>
+                    @{
+                        var lstLichSu = (List<SinhVienDangKiKeHoachHocTapDTO>)ViewBag.LichSu;
+                        foreach (var hocki in ViewBag.HocKi)
+                        {
+                            var stt = 0;
+                            var TongTC_chuongtrinhdaotao_batbuoc = 0;
+                            var TongTC_chuongtrinhdaotao_tuchon = 0;
+
+                            var batbuoc = lstLichSu.Where(c => c.IDHocKi == hocki.ID && c.IDPhanLoaiMonHoc == 1);
+                            var tuchon = lstLichSu.Where(c => c.IDHocKi == hocki.ID && c.IDPhanLoaiMonHoc == 2);
+
+                            if (batbuoc.Count() > 0 || tuchon.Count() > 0)
+                            {
+                                <tr>
+                                    <th colspan="9">@hocki.TenHocKi</th>
+                                </tr>
+                            }
+
+                            if (batbuoc.Count() > 0)
+                            {
+
+                                <tr>
+                                    <th colspan="9">Bắt buộc</th>
+                                </tr>
+                                foreach (var item in batbuoc)
+                                {
+                                    stt = stt + 1;
+                                    <tr>
+                                        <td class="center">@stt</td>
+                                        <td class="col-120">@item.MaMonHoc</td>
+                                        <td class="col-400">@item.TenMonHoc</td>
+                                        <td class="col-60">@item.SoTinChi</td>
+                                        <td class="col-68">@item.SoTietLyThuyet</td>
+                                        <td class="col-68">@item.SoTietThucHanh</td>
+                                        <td class="col-350">@item.TenMonHocTienQuyet</td>
+                                        <td class="col-350">@item.TenMonHocHocTruoc</td>
+                                        <td class="col-350">@item.TenKhoaBoMon</td>
+
+
+                                    </tr>
+                                    TongTC_chuongtrinhdaotao_batbuoc = TongTC_chuongtrinhdaotao_batbuoc + @item.SoTinChi;
+                                }
+
+
+
+                                if (TongTC_chuongtrinhdaotao_batbuoc > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Cộng học phần Bắt buộc</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_batbuoc</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+
+                            if (tuchon.Count() > 0)
+                            {
+
+                                <tr>
+                                    <th colspan="9">Tự Chọn</th>
+                                </tr>
+                                foreach (var item in tuchon)
+                                {
+                                    stt = stt + 1;
+                                    <tr>
+                                        <td class="center">@stt</td>
+                                        <td class="col-120">@item.MaMonHoc</td>
+                                        <td class="col-400">@item.TenMonHoc</td>
+                                        <td class="col-60">@item.SoTinChi</td>
+                                        <td class="col-68">@item.SoTietLyThuyet</td>
+                                        <td class="col-68">@item.SoTietThucHanh</td>
+                                        <td class="col-350">@item.TenMonHocTienQuyet</td>
+                                        <td class="col-350">@item.TenMonHocHocTruoc</td>
+                                        <td class="col-350">@item.TenKhoaBoMon</td>
+
+
+                                    </tr>
+                                    TongTC_chuongtrinhdaotao_tuchon = TongTC_chuongtrinhdaotao_tuchon + @item.SoTinChi;
+                                }
+
+
+
+                                if (TongTC_chuongtrinhdaotao_tuchon > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Cộng học phần Tự chọn</td>
+                                        <td class="font-weight-bold">@TongTC_chuongtrinhdaotao_tuchon</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+
+
+
+                        }
+
+                    }
+                </table>
+                <!----end table 1-->
+
+
+            </div>
+        </div>
+    </section>
+</div>
+@if (TempData["Success"] != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Thành công",
+                text: "",
+                icon: "success",
+            })
+        }
+    </script>
+}
+@if (ViewBag.Error != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Lỗi quá thời gian",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+@if (ViewBag.Errorthoigiandangki != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Lỗi chưa đến thời gian mở đăng kí",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+@if (ViewBag.Errorhethandangki != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Đã quá thời gian đăng kí môn học",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        @*$("#btnMonHocVuot_Tim").on("click", function () {
+            var maMonHoc = $('#txtMonHocVuot').val();
+
+            var link = '@Url.Action("Lay_MonHocVuot", "MonHocSinhVienDangKi", new { id = "_ma_" })';
+            link = link.replace("_ma_", maMonHoc);
+            location.pathname = link;
+        })*@
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".selectAll").click(function () {
+
+            $(".item-checkbox").attr('checked', this.checked);
+
+        });
+    })
+</script>
+

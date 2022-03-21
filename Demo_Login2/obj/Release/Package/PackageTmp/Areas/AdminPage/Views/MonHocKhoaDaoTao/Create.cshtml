@@ -1,0 +1,125 @@
+﻿@model Demo_Login2.Models.DTO.MonHocKhoaDaoTaoDTO
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tạo Khóa - Môn Học</h1>
+                    <br />
+                    <button class="btn btn-outline-warning" onclick="location.href='@Url.Action("Index", "MonHocKhoaDaoTao")'">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay về
+                    </button>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Tạo Khóa - Môn Học</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        @using (Html.BeginForm("Create", "MonHocKhoaDaoTao"))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDMonHoc, "Môn Học", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDMonHoc, @ViewData["monhoc"] as SelectList, htmlAttributes: new { @class = "form-control", @id = "idMonHoc" })
+                    @Html.ValidationMessageFor(model => model.IDMonHoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.Error</p>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDKhoaDaoTao, "Khóa Đào Tạo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDKhoaDaoTao, @ViewData["khoadaotao"] as SelectList, htmlAttributes: new { @class = "form-control", @id = "idKhoaDaoTao" })
+                    @Html.ValidationMessageFor(model => model.IDKhoaDaoTao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDHocKi, "Học Kì", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDHocKi, @ViewData["hocki"] as SelectList, htmlAttributes: new { @class = "form-control", @id = "idHocKi" })
+                    @Html.ValidationMessageFor(model => model.IDHocKi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDPhanLoaiMonHoc, "Loại Môn Học", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDPhanLoaiMonHoc, @ViewData["phanloaimonhoc"] as SelectList, htmlAttributes: new { @class = "form-control", @id = "idPhanLoaiMonHoc" })
+                    @Html.ValidationMessageFor(model => model.IDPhanLoaiMonHoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDHocPhanTienQuyet, "Học Phần Tiên Quyết", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDHocPhanTienQuyet, @ViewData["hocphantienquyet"] as SelectList, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDHocPhanTienQuyet, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDHocPhanHocTruoc, "Học Phần Học Trước", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDHocPhanHocTruoc, @ViewData["hocphanhoctruoc"] as SelectList, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDHocPhanHocTruoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.GhiChu, "Ghi chú", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.GhiChu, new { cols = 60, rows = 10, @class = "form-control", placeholder = "Nhập Ghi Chú" })
+                    @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" value="Lưu" class="btn btn-default" />*@
+                    <button class="btn btn-outline-success">
+                        <i class="fas fa-check"></i>
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        }
+
+    </section>
+    <div class="col-md-offset-2 col-md-3">
+
+    </div>
+</div>
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#idMonHoc").change(function () {
+            var idMonHoc = $('#idMonHoc').val();
+            var idKhoaDaoTao = $('#idKhoaDaoTao').val();
+            var idHocKi = $('#idHocKi').val();
+            var idPhanLoaiMonHoc = $('#idPhanLoaiMonHoc').val();
+
+            document.cookie = "idMonHoc=" + idMonHoc;
+            document.cookie = "idKhoaDaoTao=" + idKhoaDaoTao;
+            document.cookie = "idHocKi=" + idHocKi;
+            document.cookie = "idPhanLoaiMonHoc=" + idPhanLoaiMonHoc;
+
+            var link = '@Url.Action("Create_ThayDoiMonHoc", "MonHocKhoaDaoTao", new { id = "_id_" })';
+            link = link.replace("_id_", idMonHoc);
+            location.pathname = link;
+        });
+    })
+</script>

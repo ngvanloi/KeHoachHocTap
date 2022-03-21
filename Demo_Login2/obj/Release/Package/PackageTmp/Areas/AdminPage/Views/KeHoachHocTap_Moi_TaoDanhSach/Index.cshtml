@@ -1,0 +1,389 @@
+﻿@using Demo_Login2.Models.DTO;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .tbl-head {
+        text-align: center;
+        background: #FECE7A;
+        border: #fff solid 1px;
+        text-transform: uppercase;
+    }
+
+    .col-350 {
+        width: 350px;
+    }
+
+    .col-120 {
+        width: 120px;
+    }
+
+    .col-55 {
+        width: 55px;
+        text-align: center;
+    }
+
+    .col-250 {
+        width: 250px;
+        text-align: center;
+    }
+
+    .col-220 {
+        width: 220px;
+        text-align: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .width-200 {
+        width: 200px;
+    }
+
+    .width-400 {
+        width: 400px;
+        text-align: center;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tạo Kế Hoạch Học Tập</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Tạo Kế Hoạch Học Tập</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card">
+            <!-- /.card-header -->
+            <h3>Chương trình đào tạo</h3>
+            <div class="card-header">
+                <button class="btn btn-outline-warning" onclick="location.href='@Url.Action("Index", "KeHoachHocTap_Moi_XemDanhSach")'">
+                    <i class="fas fa-arrow-left"></i>
+                    Quay về
+                </button>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-body">
+                @using (Html.BeginForm("Index", "KeHoachHocTap_Moi_TaoDanhSach", FormMethod.Post))
+                {
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-sm-2" style="margin: 0 auto; min-width: 478px; display: flex; justify-content: center; align-items: center; ">
+                            <label style="margin-right: 15px; margin-bottom: 0; font-size: 19px; min-width: 200px; ">Khóa Đào Tạo</label>
+                            @Html.DropDownList("idKhoaDT", ViewData["khoaDT"] as SelectList, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-2" style="margin: 0 auto; min-width: 478px; display: flex; justify-content: center; align-items: center; ">
+                            <label style="margin-right: 15px; margin-bottom: 0; font-size: 19px; min-width: 200px; ">Học Kì</label>
+                            @Html.DropDownList("idHocKi", ViewData["hocki"] as SelectList, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-2" style="margin: 0 auto; min-width: 478px; display: flex; justify-content: center; align-items: center; ">
+                            <input type="submit" value="Tìm" class=" btn btn-outline-primary" style="cursor: pointer; width: 110px" title="Tìm" />
+                        </div>
+                    </div>
+                }
+                <!----table 1-->
+                <table class="table table-bordered">
+                    <tr class="tbl-head">
+                        <th rowspan="2"></th>
+                        <th rowspan="2">Mã học phần</th>
+                        <th rowspan="2">Tên học phần</th>
+                        <th rowspan="2">Số TC</th>
+                        <th rowspan="2">Phân Loại</th>
+                        <th colspan="2">Số Tiết</th>
+                        <th rowspan="2">Học Phần Tiên Quyết</th>
+                        <th rowspan="2">Học Phần Học Trước</th>
+                        <th rowspan="2">Khoa/Bộ môn</th>
+                    </tr>
+                    <tr class="tbl-head">
+                        <th colspan="1">LT</th>
+                        <th colspan="1">TH</th>
+                    </tr>
+                    @{
+                        foreach (var item in (List<ChuongTrinhDaoTao_MoiDTO>)Session["lstCTDT"])
+                        {
+                            <tr>
+                                <td class="center">
+                                    <button class="btn btn-outline-primary" title="Thêm" style="cursor:pointer" onclick="location.href = '@Url.Action("Them_KeHoachHocTap_Moi","KeHoachHocTap_Moi_TaoDanhSach",new {id = item.ID})'">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                                <td class="col-120">@item.MaMonHoc</td>
+                                <td class="col-350">@item.TenMonHoc</td>
+                                <td class="col-55">@item.SoTinChi</td>
+
+                                @if (@item.IDPhanLoaiMonHoc == 1)
+                                {
+                                    <td class="col-55">BB</td>
+                                }
+                                else
+                                {
+                                    <td class="col-55">TC</td>
+                                }
+                                <td class="col-55">@item.SoTietLyThuyet</td>
+                                <td class="col-55">@item.SoTietThucHanh</td>
+                                <td class="center">@item.TenMonHocTienQuyet</td>
+                                <td class="center">@item.TenMonHocHocTruoc</td>
+                                <td class="center">@item.TenKhoaBoMon</td>
+                            </tr>
+                        }
+                    }
+                </table>
+                <!----end table 1-->
+            </div>
+        </div>
+
+        <div class="card">
+            <!-- /.card-header -->
+            <h3>Tìm Môn Học Trong Chương Trình Đào Tạo</h3>
+            <div class="card-header">
+                Tìm Môn Học Theo Mã Môn Học
+            </div>
+            <!-- /.card-body -->
+            <div class="card-body">
+                <!----table 2-->
+                <div class="row form-group">
+                    <div class="col-5">
+                        <input type="text" placeholder="Nhập Mã Môn Học" id="txtMonHoc" class="form-control">
+
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-outline-primary" style="cursor:pointer;width:110px" title="Tìm" id="btnMonHoc_Tim">Tìm</button>
+
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+
+                    @{
+                        var timmonhoctrongCTDT = (List<ChuongTrinhDaoTao_MoiDTO>)Session["monhocCTDT"];
+                        if (timmonhoctrongCTDT.Count() > 0)
+                        {
+                            <tr class="tbl-head">
+                                <th rowspan="2"></th>
+                                <th rowspan="2">Mã học phần</th>
+                                <th rowspan="2">Tên học phần</th>
+                                <th rowspan="2">Số TC</th>
+                                <th rowspan="2">Phân Loại</th>
+                                <th colspan="2">Số Tiết</th>
+                                <th rowspan="2">Học Phần Tiên Quyết</th>
+                                <th rowspan="2">Học Phần Học Trước</th>
+                                <th rowspan="2">Khoa/Bộ môn</th>
+                            </tr>
+                            <tr class="tbl-head">
+                                <th colspan="1">LT</th>
+                                <th colspan="1">TH</th>
+                            </tr>
+                            foreach (var item in timmonhoctrongCTDT)
+                            {
+
+                                <tr>
+
+                                    <td class="center">
+                                        <button class="btn btn-outline-primary" title="Thêm" style="cursor:pointer" onclick="location.href = '@Url.Action("Them_KeHoachHocTap_Moi","KeHoachHocTap_Moi_TaoDanhSach",new {id = item.ID})'">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </td>
+                                    <td class="col-120">@item.MaMonHoc</td>
+                                    <td class="col-350">@item.TenMonHoc</td>
+                                    <td class="col-55">@item.SoTinChi</td>
+
+                                    @if (item.IDPhanLoaiMonHoc == 1)
+                                    {
+                                        <td class="col-55">BB</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="col-55">TC</td>
+                                    }
+                                    <td class="col-55">@item.SoTietLyThuyet</td>
+                                    <td class="col-55">@item.SoTietThucHanh</td>
+                                    <td class="center">@item.TenMonHocTienQuyet</td>
+                                    <td class="center">@item.TenMonHocHocTruoc</td>
+                                    <td class="center">@item.TenKhoaBoMon</td>
+                                </tr>
+                            }
+
+                        }
+
+                    }
+                    <p class="text-danger">@ViewBag.ErrorTimMonHoc</p>
+                </table>
+                <!----end table 2-->
+            </div>
+        </div>
+
+        <div class="card">
+            <!-- /.card-header -->
+            <h3>Kế Hoạch Học Tập</h3>
+            <div class="card-header">
+                <button class="btn btn-outline-success" title="Lưu" style="cursor:pointer" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fas fa-save">
+                        Lưu
+                    </i>
+                </button>
+
+                @using (Html.BeginForm("Luu_KeHoachHocTap_Moi", "KeHoachHocTap_Moi_TaoDanhSach", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <br />
+                    @Html.AntiForgeryToken()
+                    <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Lưu Kế Hoạch Học Tập
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        @Html.DropDownList("idKhoaDT", ViewData["khoaDT"] as SelectList, new { @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.DropDownList("idHocKi", ViewData["hocki"] as SelectList, new { @class = "form-control" })
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <!-- /.card-body -->
+            <div class="card-body">
+                <!----table 3-->
+                <table class="table table-bordered">
+                    <tr class="tbl-head">
+                        <th rowspan="2"></th>
+                        <th rowspan="2">Mã học phần</th>
+                        <th rowspan="2">Tên học phần</th>
+                        <th rowspan="2">Số TC</th>
+                        <th rowspan="2">Phân Loại</th>
+                        <th colspan="2">Số Tiết</th>
+                        <th rowspan="2">Học Phần Tiên Quyết</th>
+                        <th rowspan="2">Học Phần Học Trước</th>
+                        <th rowspan="2">Khoa/Bộ môn</th>
+                    </tr>
+                    <tr class="tbl-head">
+                        <th colspan="1">LT</th>
+                        <th colspan="1">TH</th>
+                    </tr>
+                    @{
+                        var TongTC = 0;
+                        foreach (var item in (List<ChuongTrinhDaoTao_MoiDTO>)Session["lstKHHT"])
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-outline-danger" title="Xóa" style="cursor:pointer" onclick="location.href = '@Url.Action("Xoa_KeHoachHocTap_Moi","KeHoachHocTap_Moi_TaoDanhSach",new {id = item.ID})'">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                                <td class="col-120">@item.MaMonHoc</td>
+                                <td class="col-350">@item.TenMonHoc</td>
+                                <td class="col-55">@item.SoTinChi</td>
+
+                                @if (@item.IDPhanLoaiMonHoc == 1)
+                                {
+                                    <td>BB</td>
+                                }
+                                else
+                                {
+                                    <td>TC</td>
+                                }
+                                <td class="col-55">@item.SoTietLyThuyet</td>
+                                <td class="col-55">@item.SoTietThucHanh</td>
+                                <td class="center">@item.TenMonHocTienQuyet</td>
+                                <td class="center">@item.TenMonHocHocTruoc</td>
+                                <td class="center">@item.TenKhoaBoMon</td>
+                            </tr>
+                            TongTC = TongTC + item.SoTinChi;
+                        }
+                        if (TongTC > 0)
+                        {
+                            <tr>
+                                <td colspan="3" class="text-right font-weight-bold">Tổng tín chỉ :</td>
+                                <td class="font-weight-bold">@TongTC</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+                        }
+                    }
+                </table>
+                <!----end table 3-->
+            </div>
+        </div>
+    </section>
+</div>
+
+@if (ViewBag.ErrorTimMonHoc != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Lỗi Môn Học không có trong Chương Trình Đào Tạo",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Phải chọn Khóa Đào Tạo và Học kì trước khi Lưu",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+@if (TempData["Errorchecktrung"] != null)
+{
+    <script>
+        window.onload = function () {
+            swal({
+                title: "Lỗi Môn Học trong Học Kì này đã tồn tại trong Kế Hoạch Học Tập",
+                text: "",
+                icon: "warning",
+            })
+        }
+    </script>
+}
+
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnMonHoc_Tim").on("click", function () {
+            var maMonHoc = $('#txtMonHoc').val();
+
+            var link = '@Url.Action("Tim_MonHocTrongChuongTrinhDaoTao_Moi", "KeHoachHocTap_Moi_TaoDanhSach", new { id = "_ma_" })';
+            link = link.replace("_ma_", maMonHoc);
+            location.pathname = link;
+        })
+    })
+</script>
+

@@ -1,0 +1,134 @@
+﻿@model Demo_Login2.Models.DTO.MonHocDTO
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/AdminPage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Sửa Môn Học</h1>
+                    <br />
+                    <button class="btn btn-outline-warning" onclick="location.href='@Url.Action("Index", "MonHoc")'">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay về
+                    </button>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ThongKe")">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Sửa Môn Học</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.MaMonHoc, "Mã Môn Học", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaMonHoc, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập Mã Môn Học", maxlength = "7" @*required = "required"*@, pattern = @"^[a-zA-Z0-9]*$" } })
+                    @Html.ValidationMessageFor(model => model.MaMonHoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorMa</p>
+            <p class="text-danger">@ViewBag.ErrorkhongcokituMa</p>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TenMonHoc, "Tên Môn Học", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TenMonHoc, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập Tên Môn Học", maxlength = "50" } })
+                    @Html.ValidationMessageFor(model => model.TenMonHoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorTen</p>
+            <p class="text-danger">@ViewBag.ErrorkhongcokituTen</p>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDKhoaBoMon, "Tên Khoa Bộ Môn", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDKhoaBoMon, @ViewData["phanloaikhoabm"] as SelectList, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDKhoaBoMon, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.IDHocPhanTienQuyet, "Học Phần Tiên Quyết", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDHocPhanTienQuyet, @ViewData["hocphantienquyet"] as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDHocPhanTienQuyet, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDHocPhanHocTruoc, "Học Phần Học Trước", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDHocPhanHocTruoc, @ViewData["hocphanhoctruoc"] as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDHocPhanHocTruoc, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.SoTiet, "Số Tiết", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SoTiet, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SoTiet, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+            <div class="form-group">
+                @Html.LabelFor(model => model.SoTietLyThuyet, "Số Tiết Lý Thuyết", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SoTietLyThuyet, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập Số Tiết Lí Thuyết"@*, min =0,max = 100, required = "required"*@, pattern = @"^[0-9]*$" } })
+                    @*@Html.ValidationMessageFor(model => model.SoTietLyThuyet, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorkhongcokitusotietLT</p>
+            <p class="text-danger">@ViewBag.ErrorSoTiet</p>
+            <p class="text-danger">@ViewBag.ErrorDieuKienSoTietLT</p>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SoTietThucHanh, "Số Tiết Thực Hành", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SoTietThucHanh, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập Số Tiết Thực Hành"@*, min =0,max = 100, required = "required"*@, pattern = @"^[0-9]*$" } })
+                    @*@Html.ValidationMessageFor(model => model.SoTietThucHanh, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorkhongcokitusotietTH</p>
+            <p class="text-danger">@ViewBag.ErrorSoTiet</p>
+            <p class="text-danger">@ViewBag.ErrorDieuKienSoTietTH</p>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SoTinChi, "Số Tín Chỉ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SoTinChi, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập Số Tín Chỉ"@*,min = "1", max = "20", required = "required"*@, pattern = @"^[0-9]*$" } })
+                    @*@Html.ValidationMessageFor(model => model.SoTinChi, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorkhongcokituSoTinChi</p>
+            <p class="text-danger">@ViewBag.ErrorDieuKienSoTinChi</p>
+            <p class="text-danger">@ViewBag.ErrorSoTinChiBeHon0</p>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GhiChu, "Ghi chú", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.GhiChu, new { cols = 60, rows = 10, @class = "form-control", placeholder = "Nhập Ghi Chú" })
+                    @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+            <div class="form-group">
+                <button class="btn btn-outline-success">
+                    <i class="fas fa-check"></i>
+                    Lưu
+                </button>
+            </div>
+        }
+    </section>
+</div>
+
